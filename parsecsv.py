@@ -1,4 +1,6 @@
 import csv
+import unicodedata
+import re
 
 def parse():
     csvpath = "py_isear_dataset\isear.csv"
@@ -17,9 +19,20 @@ def parse():
             i = i + 1
             continue
         emotions.append(row[36])
-        sentences.append(row[40])
+        normal = unicodedata.normalize('NFKD', row[40]).encode('ASCII', 'ignore')
+        normal = normal.decode("utf-8")
+        sentences.append(normal)
 
-    #print(emotions)
-    #print(sentences)
+    print(sentences[0])
+    sentiment = []
 
-    return emotions,sentences
+
+    for i in range(0, len(emotions)):
+        if(emotions[i] == "joy"):
+            sentiment.append((0, sentences[i].lower()))
+        if(emotions[i] == 'sadness' or emotions[i] == 'anger' or emotions[i] == 'digust' or emotions[i]== 'guilt' or emotions[i] == 'fear'):
+            sentiment.append((1, sentences[i].lower()))
+
+    return sentiment
+
+
