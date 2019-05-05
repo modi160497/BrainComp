@@ -48,8 +48,8 @@ if __name__ == '__main__':
 
 
     print(sen_w2v.most_similar('sad'))
+    print(sen_w2v.most_similar('love'))
 
-    #print(sen_w2v.most_similar('accident'))
     train_data = list()
     for idx, key in enumerate(sen_w2v.wv.vocab):
         train_data.append(sen_w2v.wv[key])
