@@ -1,9 +1,10 @@
 import csv
-import unicodedata
 import re
+import numpy
+from itertools import islice
 
 def parse():
-    csvpath = "py_isear_dataset\isear.csv"
+    csvpath = "trainingtwitter.csv"
 
     fd = open(csvpath, "r")
 
@@ -11,28 +12,42 @@ def parse():
 
     i = 0
 
-    emotions = []
-    sentences = []
+    sentiment1 = []
+    sentiment2 = []
 
     for row in dataset_reader:
         if i == 0:
             i = i + 1
             continue
-        emotions.append(row[36])
-        normal = unicodedata.normalize('NFKD', row[40]).encode('ASCII', 'ignore')
-        normal = normal.decode("utf-8")
-        sentences.append(normal)
+        s = row[0]
+        splitsen = s.split(",", 1)
+        if(splitsen[0]=='0'):
+            sentiment1.append((0,splitsen[1].lower()))
+        if (splitsen[0]=='4'):
+            sentiment2.append((1,splitsen[1].lower()))
 
-    print(sentences[0])
-    sentiment = []
+    print(len(sentiment1))
+    print(len(sentiment2))
+    # list of length in which we have to split
+    length_to_split = [400000,400000]
+    length_to_split2 = [100000, 100000]
 
+    # Using islice
+    Input = iter(sentiment1)
+    Output = [list(islice(Input, elem))
+              for elem in length_to_split]
 
-    for i in range(0, len(emotions)):
-        if(emotions[i] == "joy"):
-            sentiment.append((0, sentences[i].lower()))
-        if(emotions[i] == 'sadness' or emotions[i] == 'anger' or emotions[i] == 'digust' or emotions[i]== 'guilt' or emotions[i] == 'fear'):
-            sentiment.append((1, sentences[i].lower()))
+    Input2 = iter(sentiment2)
+    Output2 = [list(islice(Input2, elem))
+              for elem in length_to_split2]
 
-    return sentiment
+    print(sentiment1[0])
+    print(sentiment2[0])
+
+    train = Output[0] + Output2[0]
+
+    test = Output[1] + Output2[1]
+
+    return train, test
 
 
