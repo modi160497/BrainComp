@@ -4,7 +4,9 @@ import numpy
 from itertools import islice
 
 def parse():
+
     csvpath = "trainingtwitter.csv"
+
 
     fd = open(csvpath, "r")
 
@@ -49,5 +51,4 @@ def parse():
     test = Output[1] + Output2[1]
 
     return train, test
-
 
