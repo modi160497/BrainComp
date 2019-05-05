@@ -3,7 +3,7 @@ import unicodedata
 import re
 
 def parse():
-    csvpath = "py_isear_dataset\isear.csv"
+    csvpath = "C:/Users/Ash/Documents/Classes/CS525/BrainComp/py_isear_dataset/isear.csv"
 
     fd = open(csvpath, "r")
 
@@ -34,5 +34,3 @@ def parse():
             sentiment.append((1, sentences[i].lower()))
 
     return sentiment
-
-
