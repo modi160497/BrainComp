@@ -39,7 +39,7 @@ if __name__ == '__main__':
     print(fintokens[0])
     print(len(fintokens)) # max length of the setence used
 
-    print(tokens[0])
+    #print(tokens[0])
     print(max(length)) # max length of the setence used
 
     sen_w2v = Word2Vec(size= 200, min_count=10)
@@ -50,10 +50,10 @@ if __name__ == '__main__':
     print(sen_w2v.most_similar('sad'))
     print(sen_w2v.most_similar('love'))
 
-    train_data = list()
-    for idx, key in enumerate(sen_w2v.wv.vocab):
-        train_data.append(sen_w2v.wv[key])
+    #train_data = list()
+    #for idx, key in enumerate(sen_w2v.wv.vocab):
+        #train_data.append(sen_w2v.wv[key])
     #print(len(train_data))
-    clustering = AgglomerativeClustering(n_clusters = 50)
-    labels = clustering.fit_predict(train_data)
-    print(labels)
+    #clustering = AgglomerativeClustering(n_clusters = 50)
+   # labels = clustering.fit_predict(train_data)
+    #print(labels)

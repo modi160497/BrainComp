@@ -31,8 +31,8 @@ def parse():
     print(len(sentiment1))
     print(len(sentiment2))
     # list of length in which we have to split
-    length_to_split = [400000,400000]
-    length_to_split2 = [100000, 100000]
+    length_to_split = [400000,100000]
+    length_to_split2 = [100000, 20000]
 
     # Using islice
     Input = iter(sentiment1)
