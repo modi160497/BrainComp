@@ -50,10 +50,28 @@ if __name__ == '__main__':
     print(sen_w2v.most_similar('sad'))
     print(sen_w2v.most_similar('love'))
 
-    #train_data = list()
-    #for idx, key in enumerate(sen_w2v.wv.vocab):
-        #train_data.append(sen_w2v.wv[key])
+
+    train_data = list()
+    position = 0
+    word_position = dict()
+    train_words = list()
+    for idx, key in enumerate(sen_w2v.wv.vocab):
+        train_data.append(sen_w2v.wv[key])
+        train_words.append(key)
+        word_position[key] = position
+        position += 1
     #print(len(train_data))
-    #clustering = AgglomerativeClustering(n_clusters = 50)
-   # labels = clustering.fit_predict(train_data)
-    #print(labels)
+    clustering = AgglomerativeClustering(n_clusters = 1000)
+    labels = clustering.fit_predict(train_data)
+    #to find the cluster number of a word, look up word_position[word] to get the index, then labels[index] for cluster label
+    f = open('clusters.txt', 'a')
+    #sad_cluster = labels[word_position['sad']]
+    '''
+    for i in range(len(labels)):
+        f.write('Word: {}, Cluster: {}\n'.format(train_words[i], labels[i]))
+    f.close()
+    '''
+    for i in range(5000):
+        for j in range(len(labels)):
+            if labels[j] == i:
+                f.write('Word: {}, Cluster: {}\n'.format(train_words[j], labels[j]))
