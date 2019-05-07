@@ -40,7 +40,7 @@ def clusterword():
     print(len(fintokens)) # max length of the setence used
 
     #print(tokens[0])
-    print(max(length)) # max length of the setence used
+    print("max length of sentence = {}".format(max(length))) # max length of the setence used
 
     sen_w2v = Word2Vec(size= 200, min_count=10)
     sen_w2v.build_vocab(fintokens)
@@ -64,17 +64,19 @@ def clusterword():
     clustering = AgglomerativeClustering(n_clusters = 1000)
     labels = clustering.fit_predict(train_data)
     #to find the cluster number of a word, look up word_position[word] to get the index, then labels[index] for cluster label
+
     f = open('clusters.txt', 'a')
     #sad_cluster = labels[word_position['sad']]
-    '''
+
     for i in range(len(labels)):
-        f.write('Word: {}, Cluster: {}\n'.format(train_words[i], labels[i]))
+        f.write('{} {}\n'.format(train_words[i], labels[i]))
     f.close()
     '''
     for i in range(5000):
         for j in range(len(labels)):
             if labels[j] == i:
                 f.write('Word: {}, Cluster: {}\n'.format(train_words[j], labels[j]))
+
 
     clusters = dict()
     for i in range(len(train_words)):
@@ -83,3 +85,5 @@ def clusterword():
         clusters[word] = cl
 
     return clusters
+    '''
+clusterword()
