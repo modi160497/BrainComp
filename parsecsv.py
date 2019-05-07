@@ -33,6 +33,7 @@ def parse():
     # list of length in which we have to split
     length_to_split = [400000,100000]
     length_to_split2 = [100000, 20000]
+    length_to_splittrain1 = [50000]
 
     # Using islice
     Input = iter(sentiment1)
@@ -43,12 +44,22 @@ def parse():
     Output2 = [list(islice(Input2, elem))
               for elem in length_to_split2]
 
+    Input3 = iter(sentiment1)
+    Output3 = [list(islice(Input2, elem))
+               for elem in length_to_splittrain1]
+
+    Input4 = iter(sentiment2)
+    Output4 = [list(islice(Input2, elem))
+               for elem in length_to_split]
+
     print(sentiment1[0])
     print(sentiment2[0])
 
-    train = Output[0] + Output2[0]
+    trainword = Output[0] + Output2[0]
 
     test = Output[1] + Output2[1]
 
-    return train, test
+    train = Output3[0] + Output4[0]
+
+    return trainword, test, train
 

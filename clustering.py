@@ -15,7 +15,7 @@ def clusterword():
     fintokens = []
     length = []
 
-    sentences, testsentences = parsecsv.parse()
+    sentences, testsentences, trainsentence = parsecsv.parse()
 
     #print(len(sentences))
 
