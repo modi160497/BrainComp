@@ -5,33 +5,53 @@ import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
-from nltk.tokenize import TweetTokenizer # a tweet tokenizer from nltk.
+from nltk.tokenize import TweetTokenizer  # a tweet tokenizer from nltk.
+
 tokenizer = TweetTokenizer()
 import gensim
 from gensim.models.word2vec import Word2Vec
 from sklearn.cluster import AgglomerativeClustering
 
-def tokenizer():
+
+def tokenizerTrain():
     tokens = []
     fintokens = []
 
-    sentences, testsentences, trainsentence = parsecsv.parse()
+    sentences, testsentences, trainsentence = parsecsv.parse()  # trainsentence is 50,000 negative and 50,000 positive sentences for training data
 
     stop_words = set(stopwords.words('english'))
 
     tokenizer = RegexpTokenizer(r'\w+')
 
     for i in range(0, len(sentences)):
-
         tokens = tokenizer.tokenize(trainsentence[i][1])
         tokens = filter(lambda t: not t.startswith('@'), tokens)
         tokens = filter(lambda t: not t.startswith('#'), tokens)
         tokens = filter(lambda t: not t.startswith('http'), tokens)
-         # remove articles and stop words
+        # remove articles and stop words
         tokens = [word for word in tokens if word.isalpha()]
         tokens = [w for w in tokens if not w in stop_words]
-        fintokens.append(tokens) #contains test sentences tokenized
+        fintokens.append(tokens)  # contains test sentences tokenized
 
-def processwords():
+    return fintokens
+
+
+def processwords(index):  # return input rates for words in a given sentence, based on the cluster
     dictcluser = clustering.clusterword()
+
+    trainsentencetokes, length = tokenizerTrain()
+
+    inputrate = [100]
+
+    for i in range(0, len(trainsentencetokes)):
+        word = trainsentencetokes[index][i]
+
+        val = dictcluser[word]
+
+        inputrate[i] = (1 + val) * 0.5
+
+    return inputrate
+
+
+def neuralnet():
 
