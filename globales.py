@@ -1,4 +1,6 @@
+import numpy
+
 length = 0
 dictcluster = dict()
-clusterweights = np.zeros(1000)
+clusterweights = numpy.zeros(1000)
 tokens = list()

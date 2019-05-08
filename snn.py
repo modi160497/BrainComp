@@ -1,18 +1,15 @@
-from brian2 import *
-import clustering  # cluster.py gives back dictionary of word and which cluster it belongs to
 import parsecsv
 import nltk
 from nltk.tokenize import sent_tokenize, word_tokenize
 from nltk.corpus import stopwords
 from nltk.tokenize import RegexpTokenizer
 from nltk.tokenize import TweetTokenizer  # a tweet tokenizer from nltk.
-import numpy as np
-
+import numpy
 tokenizer = TweetTokenizer()
 import gensim
 from gensim.models.word2vec import Word2Vec
 from sklearn.cluster import AgglomerativeClustering
-import globales.py  # global variables
+import globales # global variables
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from pylab import *
@@ -48,9 +45,9 @@ def tokenizerTrain():
 
 
 def initialweights():
-    positiveweights = np.ones(100)
+    positiveweights = numpy.ones(100)
 
-    negativeweights = np.multiply(-1, np.ones(100))
+    negativeweights = numpy.multiply(-1, numpy.ones(100))
     weights = list()
     weights.append(positiveweights)
     weights.append(negativeweights)
@@ -84,7 +81,7 @@ def processwords():
 
 def inputrates(sentence_list):
 
-    firerates = np.zeros(100)
+    firerates = numpy.zeros(100)
     for i in range(len(sentence_list)):
         word = sentence_list[i]
     cl = globales.dictcluster[word]
