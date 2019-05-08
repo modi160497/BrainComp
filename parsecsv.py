@@ -28,8 +28,8 @@ def parse():
         if (splitsen[0]=='4'):
             sentiment2.append((1,splitsen[1].lower()))
 
-    print(len(sentiment1))
-    print(len(sentiment2))
+    #print(len(sentiment1))
+    #print(len(sentiment2))
     # list of length in which we have to split
     length_to_split = [400000,100000]
     length_to_split2 = [100000, 20000]
@@ -52,8 +52,10 @@ def parse():
     Output4 = [list(islice(Input2, elem))
                for elem in length_to_split]
 
-    print(sentiment1[0])
-    print(sentiment2[0])
+    print(Output4[0])
+
+    #print(sentiment1[0])
+    #print(sentiment2[0])
 
     trainword = Output[0] + Output2[0]
 

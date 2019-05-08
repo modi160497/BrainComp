@@ -9,17 +9,22 @@ tokenizer = TweetTokenizer()
 import gensim
 from gensim.models.word2vec import Word2Vec
 from sklearn.cluster import AgglomerativeClustering
-import globales # global variables
 from scipy.integrate import odeint
 import matplotlib.pyplot as plt
 from pylab import *
 import math
 import random
 
+length = 0
+dictcluster = dict()
+clusterrate = numpy.zeros(1000)
+tokens = list()
 
 def tokenizerTrain():
     tokens = []
     fintokens = []
+
+    global length
 
     sentences, testsentences, trainsentence = parsecsv.parse()  # trainsentence is 50,000 negative and 50,000 positive sentences for training data
 
@@ -27,7 +32,7 @@ def tokenizerTrain():
 
     tokenizer = RegexpTokenizer(r'\w+')
 
-    for i in range(0, len(sentences)):
+    for i in range(0, len(testsentences)):
         tokens = tokenizer.tokenize(testsentences[i][1])
         sentiment = testsentences[i][0]
         tokens = filter(lambda t: not t.startswith('@'), tokens)
@@ -36,10 +41,11 @@ def tokenizerTrain():
         # remove articles and stop words
         tokens = [word for word in tokens if word.isalpha()]
         tokens = [w for w in tokens if not w in stop_words]
-        globales.length.append(len(tokens))
+
         fintokens.append((tokens, sentiment))  # contains test sentences tokenized
 
-    globales.length = len(fintokens)
+    length = len(fintokens)
+
 
     return fintokens
 
@@ -66,26 +72,31 @@ def clusterwords():
 
 
 def processwords():
-    globales.tokens = tokenizerTrain()
-    for i in range(len(globales.tokens)):
-        sentence = globales.tokens[i][0]
-        sentim = globales.tokens[i][1]
+
+    global tokens, dictcluster, clusterrate
+
+    tokens = tokenizerTrain()
+    for i in range(len(tokens)):
+        sentence = tokens[i][0]
+        sentim = tokens[i][1]
         for word in sentence:
-            cl = globales.dictcluster[word]
+            cl = dictcluster[word]
         if sentim == 1:
-            globales.clusterrate[cl] += 1
+            clusterrate[cl] += 1
         elif sentim == 0:
-            globales.clusterrate[cl] -= 1
+            clusterrate[cl] -= 1
     # clusterweights is a list of size 1000 where each cluster's sum of sentiment
 
 
 def inputrates(sentence_list):
 
+    global dictcluster, clusterrate
+
     firerates = numpy.zeros(100)
     for i in range(len(sentence_list)):
         word = sentence_list[i]
-    cl = globales.dictcluster[word]
-    firerates[i] = globales.clusterrate[cl]
+    cl = dictcluster[word]
+    firerates[i] = clusterrate[cl]
 
 
     return firerates
@@ -137,6 +148,9 @@ def simulate_iz(_I, a, b, c, d, check):
 
 
 def neuralnetTrain():
+
+    global length, clusterrate
+
     outputspikes = []
     outputcurrents = []
     positiveoutputcurr = []
@@ -149,8 +163,11 @@ def neuralnetTrain():
     check = False
     t = 0.001
 
-    for i in range(0, globales.length):  # each sentence in the training set
-        tokenwords = globales.tokens[i][0]  # tokenwords: tokens in each sentence
+    print(length)
+
+    for i in range(0, length):  # each sentence in the training set
+
+        tokenwords = tokens[i][0]  # tokenwords: tokens in each sentence
         inputrate = inputrates(tokenwords)  # gives a list of input firing rates for each word in tokenwords
         for j in range(0, len(tokenwords)):
             rate = inputrate[j]
@@ -196,5 +213,6 @@ def neuralnetTrain():
             answers.append(0)
 
 
-globales.dictcluster = clusterwords()
+dictcluster = clusterwords()
+processwords()
 neuralnetTrain()
