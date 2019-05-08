@@ -14,6 +14,7 @@ import matplotlib.pyplot as plt
 from pylab import *
 import math
 import random
+import difflib
 
 length = 0
 dictcluster = dict()
@@ -32,8 +33,8 @@ def tokenizerTrain():
 
     tokenizer = RegexpTokenizer(r'\w+')
 
-    for i in range(0, len(testsentences)):
-        tokens = tokenizer.tokenize(testsentences[i][1])
+    for i in range(0, len(trainsentence)):
+        tokens = tokenizer.tokenize(trainsentence[i][1])
         sentiment = testsentences[i][0]
         tokens = filter(lambda t: not t.startswith('@'), tokens)
         tokens = filter(lambda t: not t.startswith('#'), tokens)
@@ -41,6 +42,7 @@ def tokenizerTrain():
         # remove articles and stop words
         tokens = [word for word in tokens if word.isalpha()]
         tokens = [w for w in tokens if not w in stop_words]
+        print(tokens)
 
         fintokens.append((tokens, sentiment))  # contains test sentences tokenized
 
@@ -80,7 +82,11 @@ def processwords():
         sentence = tokens[i][0]
         sentim = tokens[i][1]
         for word in sentence:
-            cl = dictcluster[word]
+            try:
+                cl = dictcluster[word]
+            except KeyError:
+                samelib = difflib.get_close_matches(word,dictcluster)
+                cl = dictcluster[samelib]
         if sentim == 1:
             clusterrate[cl] += 1
         elif sentim == 0:
