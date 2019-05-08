@@ -64,13 +64,15 @@ def initialweights():
 
 def clusterwords():
     cluster = dict()
+    word_list = list()
     with open('clusters.txt') as f:
         line = f.readline().split()
     key = line[1][:-1]
+    word_list.append(key)
     value = line[-1]
     cluster[key] = value
 
-    return cluster
+    return cluster, word_list
 
 
 def processwords():
