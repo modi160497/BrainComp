@@ -35,8 +35,11 @@ def tokenizerTrain():
     tokenizer = RegexpTokenizer(r'\w+')
 
     for i in range(0, len(trainsentence)):
+
+        sentiment = trainsentence[i][0]
+        print(sentiment)
         tokens = tokenizer.tokenize(trainsentence[i][1])
-        sentiment = testsentences[i][0]
+
         tokens = filter(lambda t: not t.startswith('@'), tokens)
         tokens = filter(lambda t: not t.startswith('#'), tokens)
         tokens = filter(lambda t: not t.startswith('http'), tokens)
@@ -175,17 +178,25 @@ def neuralnetTrain():
     answers = []
     check = False
     t = 0.001
+    current = 0
+    sum1 = 0
+    sum2 = 0
 
     print(length)
 
     for i in range(0, length):  # each sentence in the training set
-
+        print("AT I: " + str(i))
         tokenwords = tokens[i][0]  # tokenwords: tokens in each sentence
         inputrate = inputrates(tokenwords)  # gives a list of input firing rates for each word in tokenwords
         for j in range(0, len(tokenwords)):
             rate = inputrate[j]
+            print("AT J = " + str(j))
+            print(rate)
             spiketrain = simulate_iz(rate, 0.02, 0.2, -65, 8, check)
+
         outputspikes.append(spiketrain)  # append spiketrain for each input
+
+        print(outputspikes)
 
         for k in range(0, len(outputspikes)):
 
@@ -194,10 +205,8 @@ def neuralnetTrain():
             time_steps = len(outputspikes[k])
 
             for m in range(0, time_steps):
-                if (spiketrain1[m] == 1):
+                if (spiketrain[m] == 1):
                     current = current + 1
-                    # print("increase in current")
-                    # print(current1)
                     tf = m * 0.05
                 else:
                     # print("decrease in current")
@@ -210,13 +219,17 @@ def neuralnetTrain():
 
             outputcurr2 += outputcurrents[n] * -0.1
 
-        spiketrain1 = simulate_iz(outputcurr1, 0.02, 0.2, -65, 8, True)
 
-        spiketrain2 = simulate_iz(outputcurr2, 0.02, 0.2, -65, 8, True)
+        spiketrain1 = simulate_iz(outputcurr1, 0.02, 0.2, -65, 8, False)
+
+        spiketrain2 = simulate_iz(outputcurr2, 0.02, 0.2, -65, 8, False)
 
         sum1 = sum(spiketrain1)
-
         sum2 = sum(spiketrain2)
+
+        print(spiketrain1)
+
+        print(spiketrain2)
 
         if (sum1 > sum2):
             print("sentence is positive")
@@ -224,6 +237,9 @@ def neuralnetTrain():
         else:
             print("sentence is negative")
             answers.append(0)
+
+
+    print(answers)
 
 
 dictcluster, wordlist = clusterwords()
