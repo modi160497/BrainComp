@@ -31,8 +31,8 @@ def tokenizerTrain():
     tokenizer = RegexpTokenizer(r'\w+')
 
     for i in range(0, len(sentences)):
-        tokens = tokenizer.tokenize(trainsentence[i][1])
-        sentiment = trainsentence[i][0]
+        tokens = tokenizer.tokenize(testsentences[i][1])
+        sentiment = testsentences[i][0]
         tokens = filter(lambda t: not t.startswith('@'), tokens)
         tokens = filter(lambda t: not t.startswith('#'), tokens)
         tokens = filter(lambda t: not t.startswith('http'), tokens)
@@ -50,12 +50,11 @@ def tokenizerTrain():
 def initialweights():
     positiveweights = np.ones(100)
 
-
-negativeweights = np.multiply(-1, np.ones(100))
-weights = list()
-weights.append(positiveweights)
-weights.append(negativeweights)
-return weights
+    negativeweights = np.multiply(-1, np.ones(100))
+    weights = list()
+    weights.append(positiveweights)
+    weights.append(negativeweights)
+    return weights
 
 
 def clusterwords():
@@ -83,7 +82,8 @@ def processwords():
     # clusterweights is a list of size 1000 where each cluster's sum of sentiment
 
 
-def inputrate(sentence_list):
+def inputrates(sentence_list):
+
     firerates = np.zeros(100)
     for i in range(len(sentence_list)):
         word = sentence_list[i]
@@ -91,7 +91,7 @@ def inputrate(sentence_list):
     firerates[i] = globales.clusterrate[cl]
 
 
-return firerates
+    return firerates
 
 
 def simulate_iz(_I, a, b, c, d, check):
@@ -149,16 +149,18 @@ def neuralnetTrain():
     spiketrain1 = 0
     spiketrain2 = 0
     answers = []
+    check = False
+    t = 0.001
 
-    for i in range(0, length):  # each sentence in the training set
+    for i in range(0, globales.length):  # each sentence in the training set
         tokenwords = globales.tokens[i][0]  # tokenwords: tokens in each sentence
         inputrate = inputrates(tokenwords)  # gives a list of input firing rates for each word in tokenwords
         for j in range(0, len(tokenwords)):
             rate = inputrate[j]
-            spiketrain = simulate_iz(rate, 0.02, 0.2, -65, 8, false)
+            spiketrain = simulate_iz(rate, 0.02, 0.2, -65, 8, check)
         outputspikes.append(spiketrain)  # append spiketrain for each input
 
-        for k in range(0, len(outputspikes))
+        for k in range(0, len(outputspikes)):
 
             tf = 0
 
@@ -181,9 +183,9 @@ def neuralnetTrain():
 
             outputcurr2 += outputcurrents[n] * -0.1
 
-        spiketrain1 = simulate_iz(outputcurr1, 0.02, 0.2, -65, 8, false)
+        spiketrain1 = simulate_iz(outputcurr1, 0.02, 0.2, -65, 8, True)
 
-        spiketrain2 = simulate_iz(outputcurr2, 0.02, 0.2, -65, 8, false)
+        spiketrain2 = simulate_iz(outputcurr2, 0.02, 0.2, -65, 8, True)
 
         sum1 = sum(spiketrain1)
 
