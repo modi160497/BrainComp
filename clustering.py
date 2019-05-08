@@ -61,7 +61,7 @@ def clusterword():
         word_position[key] = position
         position += 1
     #print(len(train_data))
-    clustering = AgglomerativeClustering(n_clusters = 1000)
+    clustering = AgglomerativeClustering(n_clusters = 1000,affinity=cosine)
     labels = clustering.fit_predict(train_data)
     #to find the cluster number of a word, look up word_position[word] to get the index, then labels[index] for cluster label
 
