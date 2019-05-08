@@ -67,11 +67,12 @@ def clusterwords():
     cluster = dict()
     word_list = list()
     with open('clusters.txt') as f:
-        line = f.readline().split()
-    key = line[1][:-1]
-    word_list.append(key)
-    value = line[-1]
-    cluster[key] = value
+        for aline in f:
+            line = aline.split()
+            key = line[1][:-1]
+            word_list.append(key)
+            value = line[-1]
+            cluster[key] = value
 
     return cluster, word_list
 
@@ -91,6 +92,7 @@ def processwords():
                 cl = dictcluster[word]
             except KeyError:
                 continue
+        cl = int(cl)
         if sentim == 1:
             clusterrate[cl] += 1
         elif sentim == 0:
@@ -106,6 +108,7 @@ def inputrates(sentence_list):
     for i in range(len(sentence_list)):
         word = sentence_list[i]
     cl = dictcluster[word]
+    cl = int(cl)
     firerates[i] = clusterrate[cl]
 
 
