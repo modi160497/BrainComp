@@ -91,15 +91,17 @@ def processwords():
         sentence = tokens[i][0]
         sentim = tokens[i][1]
         for word in sentence:
+            print(word, str(sentim))
             try:
                 cl = dictcluster[word]
             except KeyError:
                 continue
-        cl = int(cl)
-        if sentim == 1:
-            clusterrate[cl] += 1
-        elif sentim == 0:
-            clusterrate[cl] -= 1
+            cl = int(cl)
+
+            if sentim == 1:
+                clusterrate[cl] += 1
+            elif sentim == 0:
+                clusterrate[cl] -= 1
     print(clusterrate)
     # clusterweights is a list of size 1000 where each cluster's sum of sentiment
 
@@ -108,13 +110,17 @@ def inputrates(sentence_list):
 
     global dictcluster, clusterrate
 
+    cl = 0
+
     firerates = numpy.zeros(100)
     for i in range(len(sentence_list)):
         word = sentence_list[i]
-    cl = dictcluster[word]
-    cl = int(cl)
-    firerates[i] = clusterrate[cl]
-
+        try:
+            cl = dictcluster[word]
+        except KeyError:
+            continue
+        cl = int(cl)
+        firerates[i] = clusterrate[cl]
 
     return firerates
 
@@ -182,6 +188,7 @@ def neuralnetTrain():
     current = 0
     sum1 = 0
     sum2 = 0
+    rate = 0
 
     print(length)
 
@@ -192,7 +199,10 @@ def neuralnetTrain():
         for j in range(0, len(tokenwords)):
             rate = inputrate[j]
             print("AT J = " + str(j))
-            print(rate)
+            if(rate <= 0):
+                rate = 0
+            if(rate > 0):
+                rate = 4
             spiketrain = simulate_iz(rate, 0.02, 0.2, -65, 8, check)
 
         outputspikes.append(spiketrain)  # append spiketrain for each input
@@ -216,14 +226,16 @@ def neuralnetTrain():
                 outputcurrents.append(current)
 
         for n in range(0, len(outputcurrents)):
-            outputcurr1 += outputcurrents[n] * 0.1
+            outputcurr1 += outputcurrents[n] * 0.000001
 
-            outputcurr2 += outputcurrents[n] * -0.1
+            outputcurr2 += outputcurrents[n] * -00000.1
 
 
-        spiketrain1 = simulate_iz(outputcurr1, 0.02, 0.2, -65, 8, False)
+        print(outputcurr1)
+        print(outputcurr2)
+        spiketrain1 = simulate_iz(outputcurr1, 0.02, 0.2, -65, 8, True)
 
-        spiketrain2 = simulate_iz(outputcurr2, 0.02, 0.2, -65, 8, False)
+        spiketrain2 = simulate_iz(outputcurr2, 0.02, 0.2, -65, 8, True)
 
         sum1 = sum(spiketrain1)
         sum2 = sum(spiketrain2)
