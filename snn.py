@@ -20,6 +20,7 @@ length = 0
 dictcluster = dict()
 clusterrate = numpy.zeros(1000)
 tokens = list()
+wordlist = []
 
 def tokenizerTrain():
     tokens = []
@@ -79,6 +80,8 @@ def processwords():
 
     global tokens, dictcluster, clusterrate
 
+    cl = 0
+
     tokens = tokenizerTrain()
     for i in range(len(tokens)):
         sentence = tokens[i][0]
@@ -87,8 +90,7 @@ def processwords():
             try:
                 cl = dictcluster[word]
             except KeyError:
-                samelib = difflib.get_close_matches(word,dictcluster)
-                cl = dictcluster[samelib]
+                continue
         if sentim == 1:
             clusterrate[cl] += 1
         elif sentim == 0:
@@ -221,6 +223,11 @@ def neuralnetTrain():
             answers.append(0)
 
 
-dictcluster = clusterwords()
+dictcluster, wordlist = clusterwords()
+
+f = open("test.txt","w")
+for key in dictcluster:
+    f.write("{} {}".format(key, dictcluster[key]))
+f.close()
 processwords()
 neuralnetTrain()
