@@ -37,12 +37,12 @@ def parse():
 
     # Using islice
     Input = iter(sentiment1)
-    Output = [list(islice(Input, elem))
-              for elem in length_to_split]
-
     Input2 = iter(sentiment2)
-    Output2 = [list(islice(Input2, elem))
-              for elem in length_to_split2]
+
+
+    Output = sentiment1[:400000]
+    Output2 = sentiment2[:100000]
+
 
     Output3 = sentiment1[:5]
 
@@ -51,9 +51,9 @@ def parse():
     #print(sentiment1[0])
     #print(sentiment2[0])
 
-    trainword = Output[0] + Output2[0]
+    trainword = Output + Output2
 
-    test = Output[1] + Output2[1]
+    test = Output + Output2
 
     train = Output3 + Output4
 
