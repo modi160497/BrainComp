@@ -100,6 +100,7 @@ def processwords():
             clusterrate[cl] += 1
         elif sentim == 0:
             clusterrate[cl] -= 1
+    print(clusterrate)
     # clusterweights is a list of size 1000 where each cluster's sum of sentiment
 
 
@@ -196,7 +197,7 @@ def neuralnetTrain():
 
         outputspikes.append(spiketrain)  # append spiketrain for each input
 
-        print(outputspikes)
+        #print(outputspikes)
 
         for k in range(0, len(outputspikes)):
 
@@ -227,9 +228,9 @@ def neuralnetTrain():
         sum1 = sum(spiketrain1)
         sum2 = sum(spiketrain2)
 
-        print(spiketrain1)
+        #print(spiketrain1)
 
-        print(spiketrain2)
+        #print(spiketrain2)
 
         if (sum1 > sum2):
             print("sentence is positive")
