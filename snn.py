@@ -57,7 +57,7 @@ def initialweights():
 def clusterwords():
     cluster = dict()
     with open('clusters.txt') as f:
-        line = f.getline().split()
+        line = f.readline().split()
     key = line[1][:-1]
     value = line[-1]
     cluster[key] = value
@@ -198,6 +198,3 @@ def neuralnetTrain():
 
 globales.dictcluster = clusterwords()
 neuralnetTrain()
-
-
-
